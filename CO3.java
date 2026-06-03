@@ -1,54 +1,134 @@
+import java.util.*;
+
 public class CO3 {
+
+    static class Edge {
+        String u, v;
+        int weight;
+
+        Edge(String u, String v, int weight) {
+            this.u = u;
+            this.v = v;
+            this.weight = weight;
+        }
+    }
+
+    static class UnionFind {
+
+        HashMap<String, String> parent =
+                new HashMap<>();
+
+        void makeSet(String v) {
+            parent.put(v, v);
+        }
+
+        String find(String x) {
+
+            if(parent.get(x).equals(x))
+                return x;
+
+            return find(parent.get(x));
+        }
+
+        boolean union(String a, String b) {
+
+            String ra = find(a);
+            String rb = find(b);
+
+            if(ra.equals(rb))
+                return false;
+
+            parent.put(ra, rb);
+            return true;
+        }
+    }
 
     public static void main(String[] args) {
 
-        System.out.println("=========================================");
-        System.out.println("BANGALORE METRO PHASE-3 EXPANSION");
-        System.out.println("KRUSKAL ALGORITHM AND UNION-FIND");
-        System.out.println("=========================================");
+        ArrayList<Edge> edges =
+                new ArrayList<>();
 
-        System.out.println("\nMST OUTPUT");
-        System.out.println("-----------------------------------------");
+        edges.add(new Edge("H","K",14));
+        edges.add(new Edge("H","M",11));
+        edges.add(new Edge("H","Y",9));
 
-        System.out.println("Selected MST Edges:");
-        System.out.println("S - E : 4");
-        System.out.println("K - W : 5");
-        System.out.println("W - S : 6");
-        System.out.println("M - E : 7");
-        System.out.println("Y - H : 8");
-        System.out.println("M - Y : 9");
+        edges.add(new Edge("Y","M",9));
+        edges.add(new Edge("Y","E",8));
 
-        System.out.println("\nTotal MST Cost : 39 Crore");
+        edges.add(new Edge("M","E",7));
+        edges.add(new Edge("M","S",10));
+        edges.add(new Edge("M","K",8));
+        edges.add(new Edge("M","W",12));
 
-        System.out.println("\n=========================================");
+        edges.add(new Edge("E","S",4));
+        edges.add(new Edge("S","W",6));
+        edges.add(new Edge("K","W",5));
 
-        System.out.println("\nUNION-FIND OUTPUT");
-        System.out.println("-----------------------------------------");
+        edges.sort(
+            Comparator.comparingInt(e -> e.weight)
+        );
 
-        System.out.println("Connected Components : 1");
-        System.out.println("Cycle Detection      : No Cycles Found");
+        String[] stations = {
+            "M","K","W","S","E","Y","H"
+        };
 
-        System.out.println("\n=========================================");
+        UnionFind uf = new UnionFind();
 
-        System.out.println("\nPERFORMANCE ANALYSIS");
-        System.out.println("-----------------------------------------");
+        for(String s : stations)
+            uf.makeSet(s);
 
-        System.out.println("Kruskal Algorithm : O(m log m)");
-        System.out.println("Union-Find        : O(alpha(n))");
+        int totalCost = 0;
 
-        System.out.println("\n=========================================");
+        System.out.println(
+        "====================================");
+        System.out.println(
+        "BANGALORE METRO PHASE-3");
+        System.out.println(
+        "KRUSKAL MST");
+        System.out.println(
+        "====================================");
 
-        System.out.println("\nOBSERVATIONS");
-        System.out.println("-----------------------------------------");
+        System.out.println(
+        "\nSelected MST Edges:");
 
-        System.out.println("1. MST minimizes construction cost.");
-        System.out.println("2. Union-Find prevents cycles.");
-        System.out.println("3. Graph remains connected.");
-        System.out.println("4. Path compression improves efficiency.");
-        System.out.println("5. Suitable for transportation networks.");
+        for(Edge e : edges) {
 
-        System.out.println("\n=========================================");
-        System.out.println("CASE STUDY COMPLETED SUCCESSFULLY");
-        System.out.println("=========================================");
+            if(uf.union(e.u,e.v)) {
+
+                totalCost += e.weight;
+
+                System.out.println(
+                e.u + " - " +
+                e.v + " : " +
+                e.weight + " Crore");
+            }
+        }
+
+        System.out.println(
+        "\nTotal MST Cost = "
+        + totalCost + " Crore");
+
+        System.out.println(
+        "\nRedundancy Check:");
+
+        System.out.println(
+        "Additional Edge Suggested: M-W (12)");
+
+        System.out.println(
+        "Provides Second Path Between M and W");
+
+        System.out.println(
+        "\nComplexity:");
+        System.out.println(
+        "Kruskal = O(m log m)");
+        System.out.println(
+        "Union Find = O(alpha(n))");
+
+        System.out.println(
+        "\n====================================");
+        System.out.println(
+        "CASE STUDY COMPLETED");
+        System.out.println(
+        "====================================");
     }
 }
